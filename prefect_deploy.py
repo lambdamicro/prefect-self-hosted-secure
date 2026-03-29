@@ -7,17 +7,15 @@ from pathlib import Path
 ENVIRONMENT = os.getenv("ENVIRONMENT", "NOT_SET")
 
 DEPLOYMENTS = [
-    # ("jobs/test-env-vars.py:start_test", "start-test-env-vars-flow"),
     ("jobs/test-env-vars.py:start_test", "start-test-env-vars-flow"),
 ]
 
 GIT_REPO_URL = "https://github.com/seansss/lambda-tutorials-test.git"
 
-WORK_POOL = "docker-pool-lambda"
-IMAGE = "getting-started-flow:lambda"
+WORK_POOL = "local-pool"
+IMAGE = "getting-started-flow:v1"
 
 JOB_VARS = {
-    #"extra_hosts": {"host.docker.internal": "host-gateway"},
     "image_pull_policy": "Never",
     "env": {
         "ENVIRONMENT": ENVIRONMENT,
@@ -34,22 +32,13 @@ if __name__ == "__main__":
     for entrypoint, name in DEPLOYMENTS:
         try:
             print(f"Loading flow from entrypoint: {entrypoint}")
-            # Use from_source for proper deployment with source location
-            #flow_obj = prefect_flow.from_source(
-            #    source=str(script_dir),
-            #    entrypoint=entrypoint,
-            #)
-            
+            # Retrieve from github or directory
             flow_obj = prefect_flow.from_source(
+                #source=str(script_dir),
                 source=GIT_REPO_URL,
                 entrypoint=entrypoint,
             )
 
-            if flow_obj is None:
-                print(f"ERROR: Failed to load flow from {entrypoint}")
-                continue
-                
-            print(f"Deploying {entrypoint} as '{name}'...")
             flow_obj.deploy(
                 name=name,
                 work_pool_name=WORK_POOL,

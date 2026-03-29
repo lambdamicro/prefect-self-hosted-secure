@@ -2,8 +2,4 @@ FROM prefecthq/prefect:3-latest
 
 WORKDIR /app
 COPY . .
-COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-#COPY ./ .
-COPY prefect_deploy.py .
-COPY .env.prefect .env
