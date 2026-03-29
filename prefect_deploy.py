@@ -10,7 +10,7 @@ DEPLOYMENTS = [
     ("jobs/test-env-vars.py:start_test", "start-test-env-vars-flow"),
 ]
 
-GIT_REPO_URL = "https://github.com/seansss/lambda-tutorials-test.git"
+GIT_REPO_URL = "https://github.com/lambdamicro/prefect-self-hosted-secure.git"
 
 WORK_POOL = "local-pool"
 IMAGE = "getting-started-flow:v1"

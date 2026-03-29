@@ -33,14 +33,14 @@ services:
     environment:
       PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:prefect@postgres:5432/prefect
       PREFECT_SERVER_API_HOST: 0.0.0.0
-      #PREFECT_SERVER_UI_API_URL: http://host.docker.internal:4200/api
+      PREFECT_SERVER_UI_API_URL: http://localhost:4200/api
       PREFECT_MESSAGING_BROKER: prefect_redis.messaging
       PREFECT_MESSAGING_CACHE: prefect_redis.messaging
       PREFECT_REDIS_MESSAGING_HOST: redis
       PREFECT_REDIS_MESSAGING_PORT: 6379
       PREFECT_REDIS_MESSAGING_DB: 0
-      PREFECT_UI_API_URL: /api
-      ENVIRONMENT: local
+    env_file:
+      - .env
     command: prefect server start --no-services
     ports:
       - "4200:4200"
@@ -63,15 +63,20 @@ services:
       PREFECT_REDIS_MESSAGING_HOST: redis
       PREFECT_REDIS_MESSAGING_PORT: 6379
       PREFECT_REDIS_MESSAGING_DB: 0
+    env_file:
+      - .env
     command: prefect server services start
 
   # Docker worker that launches each flow run as a Docker container
   prefect-worker:
     image: prefecthq/prefect:3-latest
+    depends_on:
+      prefect-server:
+        condition: service_healthy
     environment:
       PREFECT_API_URL: http://host.docker.internal:4200/api
-      ENVIRONMENT: localworker
-      #PREFECT_API_AUTH_STRING: username:password
+    env_file:
+      - .env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: >
@@ -93,7 +98,6 @@ services:
         condition: service_healthy
     environment:
       PREFECT_API_URL: http://host.docker.internal:4200/api
-      #PREFECT_API_AUTH_STRING: username:password
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: >
