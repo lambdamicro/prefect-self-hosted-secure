@@ -6,6 +6,8 @@ This repository demonstrates how developers can self-host [Prefect](https://www.
 
 The stack is fully containerized with Docker Compose and includes Postgres for persistent storage, Redis for messaging, a Prefect server, background services, and a Docker-based worker pool — all wired together and ready to run locally.
 
+Obtain the original prefect yaml file from https://docs.prefect.io/v3/how-to-guides/self-hosted/docker-compose.
+
 ---
 
 ## Architecture
