@@ -4,7 +4,7 @@ import os
 import sys
 from pathlib import Path
 
-ENVIRONMENT = os.getenv("ENVIRONMENT", "NOT_SET")
+ENVIRONMENT = os.getenv("ENVIRONMENT")
 
 DEPLOYMENTS = [
     ("jobs/test-env-vars.py:start_test", "start-test-env-vars-flow"),
@@ -34,8 +34,8 @@ if __name__ == "__main__":
             print(f"Loading flow from entrypoint: {entrypoint}")
             # Retrieve from github or directory
             flow_obj = prefect_flow.from_source(
-                #source=str(script_dir),
-                source=GIT_REPO_URL,
+                source=str(script_dir),
+                #source=GIT_REPO_URL,
                 entrypoint=entrypoint,
             )
 
